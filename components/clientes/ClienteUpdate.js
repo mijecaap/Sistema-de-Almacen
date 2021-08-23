@@ -13,13 +13,13 @@ import {
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import FirebaseContext from "../../firebase/context";
-import useMateriales from "../../hooks/useMateriales";
+import useClientes from "../../hooks/useClientes";
 
-const MaterialUpdate = () => {
+const ClienteUpdate = () => {
   const [current, setCurrent] = useState(0);
   const [id, setId] = useState("");
 
-  const { materiales } = useMateriales("nombre");
+  const { clientes } = useClientes("nombre");
 
   const { usuario, firebase } = useContext(FirebaseContext);
 
@@ -29,39 +29,45 @@ const MaterialUpdate = () => {
   const handleUpdate = (key) => {
     try {
       setId(key);
-      const temp = materiales.filter((material) => material.id === key)[0];
+      const temp = clientes.filter((cliente) => cliente.id === key)[0];
       setCurrent(current + 1);
       form.setFieldsValue({
-        cod_material: temp.cod_material,
+        cod_cliente: temp.cod_cliente,
         nombre: temp.nombre,
-        precio: temp.precio,
-        stock: temp.stock,
-        capacidad_max: temp.capacidad_max,
-        descripcion: temp.descripcion,
+        celular: temp.celular,
+        email: temp.email,
+        direccion: temp.direccion,
+        doc_identificacion: temp.doc_identificacion,
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  async function actualizarMaterial(values) {
+  async function actualizarCliente(values) {
     if (!usuario) {
       return router.push("/login");
     }
 
-    const { cod_material, nombre, precio, descripcion, stock, capacidad_max } =
-      values;
-
-    const material = {
-      cod_material,
+    const {
+      cod_cliente,
       nombre,
-      precio,
-      descripcion,
-      stock,
-      capacidad_max,
+      celular,
+      email,
+      direccion,
+      doc_identificacion,
+    } = values;
+
+    const cliente = {
+      cod_cliente,
+      nombre,
+      celular,
+      email,
+      direccion,
+      doc_identificacion,
     };
 
-    firebase.db.collection("materiales").doc(id).update(material);
+    firebase.db.collection("clientes").doc(id).update(cliente);
 
     message.success("¡Actualización completada!");
 
@@ -81,37 +87,43 @@ const MaterialUpdate = () => {
   };
 
   const data = [];
-  materiales.map((material) => {
+  clientes.map((cliente) => {
     data.push({
-      key: material.id,
-      cod_material: material.cod_material,
-      nombre: material.nombre,
-      descripcion: material.descripcion,
-      stock: material.stock,
+      key: cliente.id,
+      nombre: cliente.nombre,
+      doc_identificacion: cliente.doc_identificacion,
+      celular: cliente.celular,
+      email: cliente.email,
+      direccion: cliente.direccion,
     });
   });
 
   const columns = [
-    {
-      title: "Codigo",
-      dataIndex: "cod_material",
-      key: "cod_material",
-      editable: true,
-    },
     {
       title: "Nombre",
       dataIndex: "nombre",
       key: "nombre",
     },
     {
-      title: "Descripcion",
-      dataIndex: "descripcion",
-      key: "descripcion",
+      title: "Doc. Identificacion",
+      dataIndex: "doc_identificacion",
+      key: "doc_identificacion",
+      width: "10%",
     },
     {
-      title: "Stock",
-      dataIndex: "stock",
-      key: "stock",
+      title: "Celular",
+      dataIndex: "celular",
+      key: "celular",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Dirección",
+      dataIndex: "direccion",
+      key: "direccion",
     },
     {
       title: "Actualizar",
@@ -139,113 +151,105 @@ const MaterialUpdate = () => {
       initialValues={{
         remember: true,
       }}
-      onFinish={actualizarMaterial}
+      onFinish={actualizarCliente}
       onFinishFailed={onFinishFailed}
     >
       <Row gutter={12}>
-        <Col span={6}>
+        <Col span={8}>
           <Form.Item
-            label="Código"
-            name="cod_material"
+            name="cod_cliente"
             rules={[
               {
                 required: true,
-                message: "Ingrese el codigo del material",
+                message: "Ingrese el codigo del cliente",
               },
             ]}
           >
-            <Input placeholder="Codigo del material" size="large" />
+            <Input placeholder="Codigo del cliente" size="large" />
           </Form.Item>
         </Col>
 
-        <Col span={18}>
+        <Col span={16}>
           <Form.Item
-            label="Nombre"
             name="nombre"
             rules={[
               {
                 required: true,
-                message: "Ingrese el nombre del material",
+                message: "Ingrese el nombre del cliente",
               },
             ]}
           >
-            <Input placeholder="Nombre del material" size="large" />
+            <Input placeholder="Nombre del cliente" size="large" />
           </Form.Item>
         </Col>
 
         <Col span={8}>
           <Form.Item
-            label="Precio"
-            name="precio"
+            name="celular"
             rules={[
               {
                 required: true,
-                message: "Ingrese el precio del material",
+                message: "Ingrese el número de celular",
+              },
+              {
+                type: "string",
+                len: 9,
+                message: "Ingrese un número válido",
               },
             ]}
           >
-            <Input
-              placeholder="Precio del material"
-              type="number"
-              size="large"
-            />
+            <Input placeholder="Número de celular" size="large" />
+          </Form.Item>
+        </Col>
+
+        <Col span={16}>
+          <Form.Item
+            name="email"
+            rules={[
+              {
+                type: "email",
+                message: "El email no es válido",
+              },
+              {
+                required: true,
+                message: "Ingrese el email del cliente",
+              },
+            ]}
+          >
+            <Input placeholder="Email del cliente" size="large" />
           </Form.Item>
         </Col>
 
         <Col span={8}>
           <Form.Item
-            label="Stock"
-            name="stock"
+            name="doc_identificacion"
             rules={[
               {
                 required: true,
-                message: "Ingrese el stock del material",
+                message: "Ingrese el número de dni",
+              },
+              {
+                type: "string",
+                len: 8,
+                message: "Ingrese un formato válido de dni",
               },
             ]}
           >
-            <Input
-              placeholder="Stock del material"
-              type="number"
-              size="large"
-            />
+            <Input placeholder="DNI del cliente" size="large" />
           </Form.Item>
         </Col>
 
-        <Col span={8}>
+        <Col span={16}>
           <Form.Item
-            label="Capacidad máxima"
-            name="capacidad_max"
+            name="direccion"
             rules={[
               {
                 required: true,
-                message: "Ingrese la capacidad máxima del material",
+                message: "Ingrese una dirección de residencia",
               },
             ]}
           >
-            <Input
-              placeholder="Capacidad máxima del material"
-              type="number"
-              size="large"
-            />
-          </Form.Item>
-        </Col>
-
-        <Col span={24}>
-          <Form.Item
-            label="Descripcion"
-            name="descripcion"
-            rules={[
-              {
-                required: true,
-                message: "Ingrese la descripcion del material",
-              },
-            ]}
-          >
-            <Input.TextArea
-              placeholder="Descripcion del material"
-              size="large"
-              autoSize={{ minRows: 2, maxRows: 4 }}
-            />
+            <Input placeholder="Dirección del cliente" size="large" />
           </Form.Item>
         </Col>
 
@@ -263,8 +267,8 @@ const MaterialUpdate = () => {
 
   const steps = [
     {
-      title: "Lista de Materiales",
-      description: "Escoja un material",
+      title: "Lista de Clientes",
+      description: "Escoja un cliente",
       content: tab,
     },
     {
@@ -273,7 +277,7 @@ const MaterialUpdate = () => {
       content: upd,
     },
   ];
-  
+
   return (
     <>
       <Steps current={current}>
@@ -297,4 +301,4 @@ const MaterialUpdate = () => {
   );
 };
 
-export default MaterialUpdate;
+export default ClienteUpdate;

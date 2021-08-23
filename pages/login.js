@@ -1,15 +1,17 @@
 import { Button, Col, Input, Row, Typography, Form } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Router from "next/router";
 import Head from "next/head";
 import "antd/dist/antd.css";
 
-import firebase from "../firebase";
+import FirebaseContext from "../firebase/context";
+import firebase from "../firebase/firebase";
 
 // Validaciones
 import useValidacion from "../hooks/useValidacion";
 import validarIniciarSesion from "../validacion/validarIniciarSesion";
+import usePersonal from "../hooks/usePersonal";
 
 const STATE_INICIAL = {
   email: "",
@@ -21,22 +23,59 @@ const login = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const { empleados } = usePersonal("nombre");
+  const data = [];
+  empleados.map((empleado) => {
+    data.push({
+      key: empleado.id,
+      nombre: empleado.nombre,
+      password: empleado.password,
+      tipo_personal: empleado.tipo_personal,
+      dni: empleado.dni,
+      fecha_nacimiento: empleado.fecha_nacimiento,
+      celular: empleado.celular,
+      direccion: empleado.direccion,
+      vigencia_contrato: empleado.vigencia_contrato,
+      email: empleado.email,
+    });
+  });
+
   const { valores, handleChange } = useValidacion(
     STATE_INICIAL,
     validarIniciarSesion,
     iniciarSesion
   );
 
+  const [usermain, setUserMain] = useState({});
+
   const { email, password } = valores;
+  const { usuario } = useContext(FirebaseContext);
 
   async function iniciarSesion(values) {
+    const user = data.filter((us) => us.email === values.email)[0];
+    setUserMain(user);
     try {
       await firebase.login(values.email, values.password);
       Router.push("/");
     } catch (error) {
-      console.log(error.message);
+      //console.log(error.message);
+
+      if (user.email === values.email && user.password === values.password) {
+        await firebase.registrar(user.nombre, user.email, user.password);
+        await firebase.login(user.email, user.password);
+        //Router.push("/");
+      }
     }
   }
+
+  useEffect(() => {
+    if (usuario !== null) {
+      firebase.db.collection("empleados").doc(usermain.key).update({
+        uid: usuario.uid,
+      });
+      Router.push("/");
+    }
+  }, [usuario]);
 
   return (
     <>
@@ -65,11 +104,17 @@ const login = () => {
           <Col span={8} />
           <Col
             span={8}
-            style={{ padding: 20, backgroundColor: "rgba(0,0,0,0.75)", borderRadius: 5 }}
+            style={{
+              padding: 20,
+              backgroundColor: "rgba(0,0,0,0.75)",
+              borderRadius: 5,
+            }}
           >
             <Row>
               <Col span={24}>
-                <Typography.Title style={{ textAlign: "center", color: "white" }}>
+                <Typography.Title
+                  style={{ textAlign: "center", color: "white" }}
+                >
                   Login
                 </Typography.Title>
               </Col>

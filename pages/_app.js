@@ -1,5 +1,8 @@
+import React from 'react';
 import App from "next/app";
-import firebase, { FirebaseContext } from "../firebase";
+import firebase from "../firebase/firebase";
+import FirebaseContext from "../firebase/context"
+
 import useAutenticacion from "../hooks/useAutenticacion";
 
 const MyApp = (props) => {

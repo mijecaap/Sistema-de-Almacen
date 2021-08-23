@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import FirebaseContext from "../firebase/context";
 
-const usePersonal = (orden) => {
-  const [empleados, guardarEmpleados] = useState([]);
+const useContratos = (orden) => {
+  const [contratos, guardarContratos] = useState([]);
 
   const { firebase } = useContext(FirebaseContext);
 
   useEffect(() => {
     const productsQuery = firebase.db
-      .collection("empleados")
+      .collection("contratos")
       .orderBy(orden, "desc")
       .onSnapshot(manejarSnapshot);
 
@@ -26,18 +26,18 @@ const usePersonal = (orden) => {
   }, []);
 
   function manejarSnapshot(snapshot) {
-    const empleados = snapshot.docs.map((doc) => {
+    const contratos = snapshot.docs.map((doc) => {
       return {
         id: doc.id,
         ...doc.data(),
       };
     });
-    guardarEmpleados(empleados);
+    guardarContratos(contratos);
   }
 
   return {
-    empleados,
+    contratos,
   };
 };
 
-export default usePersonal;
+export default useContratos;

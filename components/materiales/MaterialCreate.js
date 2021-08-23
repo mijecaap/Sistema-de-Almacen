@@ -1,5 +1,5 @@
 import { Col, Row, Typography, Form, Input, Button } from "antd";
-import { FirebaseContext } from "../../firebase";
+import FirebaseContext from "../../firebase/context";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
 
@@ -27,6 +27,8 @@ const MaterialCreate = () => {
     };
 
     firebase.db.collection("materiales").add(material);
+
+    message.success("¡Creación completada!");
 
     form.resetFields();
   }

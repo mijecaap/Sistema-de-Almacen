@@ -1,7 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Popconfirm, Table } from "antd";
 import React, { useContext } from "react";
-import { FirebaseContext } from "../../firebase";
+import FirebaseContext from "../../firebase/context";
 import useMateriales from "../../hooks/useMateriales";
 
 const MaterialDelete = () => {
@@ -12,6 +12,7 @@ const MaterialDelete = () => {
   const handleDelete = async (key) => {
     try {
       await firebase.db.collection("materiales").doc(key).delete();
+      message.success("¡Se eliminó correctamente!");
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +70,7 @@ const MaterialDelete = () => {
 
   return (
     <>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
     </>
   );
 };

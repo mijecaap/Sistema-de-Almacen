@@ -1,7 +1,7 @@
-import { Col, Row, Typography, Form, Input, Button } from "antd";
+import { Col, Row, Typography, Form, Input, Button, message } from "antd";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
-import { FirebaseContext } from "../../firebase";
+import FirebaseContext from "../../firebase/context";
 
 const ClienteCreate = () => {
   const { usuario, firebase } = useContext(FirebaseContext);
@@ -33,6 +33,8 @@ const ClienteCreate = () => {
     };
 
     firebase.db.collection("clientes").add(cliente);
+
+    message.success("¡Creación completada!");
 
     form.resetFields();
   }

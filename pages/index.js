@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Layout from "../components/layout/Layout";
-import { FirebaseContext } from "../firebase";
+import FirebaseContext from "../firebase/context";
 import { useRouter } from "next/router";
 import { Button, Result } from "antd";
 

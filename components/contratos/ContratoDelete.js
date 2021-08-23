@@ -1,17 +1,21 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Popconfirm, Table, message } from "antd";
+import { Popconfirm, Table } from "antd";
 import React, { useContext } from "react";
 import FirebaseContext from "../../firebase/context";
+import useContratos from "../../hooks/useContratos";
+import useServicios from "../../hooks/useServicios";
 import useClientes from "../../hooks/useClientes";
 
-const ClienteDelete = () => {
-  const { clientes } = useClientes("nombre");
+const ContratoDelete = () => {
+  const { contratos } = useContratos("fecha");
+  const clientesload = useClientes("nombre");
+  const serviciosload = useServicios("nombre");
 
   const { firebase } = useContext(FirebaseContext);
 
   const handleDelete = async (key) => {
     try {
-      await firebase.db.collection("clientes").doc(key).delete();
+      await firebase.db.collection("contratos").doc(key).delete();
       message.success("¡Se eliminó correctamente!");
     } catch (error) {
       console.log(error);
@@ -19,37 +23,36 @@ const ClienteDelete = () => {
   };
 
   const data = [];
-  clientes.map((cliente) => {
+  contratos.map((contrato) => {
     data.push({
-      key: cliente.id,
-      nombre: cliente.nombre,
-      doc_identificacion: cliente.doc_identificacion,
-      email: cliente.email,
-      direccion: cliente.direccion,
+      key: contrato.id,
+      id_cliente: contrato.nombre_cliente,
+      id_servicio: contrato.nombre_servicio,
+      lugar: contrato.lugar,
+      fecha: contrato.fecha,
     });
   });
 
   const columns = [
     {
-      title: "Nombre",
-      dataIndex: "nombre",
-      key: "nombre",
+      title: "Cliente",
+      dataIndex: "id_cliente",
+      key: "id_cliente",
     },
     {
-      title: "Doc. Identificacion",
-      dataIndex: "doc_identificacion",
-      key: "doc_identificacion",
-      width: "10%",
+      title: "Servicio",
+      dataIndex: "id_servicio",
+      key: "id_servicio",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: "Lugar",
+      dataIndex: "lugar",
+      key: "lugar",
     },
     {
-      title: "Dirección",
-      dataIndex: "direccion",
-      key: "direccion",
+      title: "Fecha",
+      dataIndex: "fecha",
+      key: "fecha",
     },
     {
       title: "Eliminar",
@@ -75,4 +78,4 @@ const ClienteDelete = () => {
   );
 };
 
-export default ClienteDelete;
+export default ContratoDelete;

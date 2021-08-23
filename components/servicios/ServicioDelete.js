@@ -1,7 +1,7 @@
 import { Popconfirm, Table, Tag } from "antd";
 import React, { useContext } from "react";
 import useServicios from "../../hooks/useServicios";
-import { FirebaseContext } from "../../firebase";
+import FirebaseContext from "../../firebase/context";
 import { DeleteOutlined } from "@ant-design/icons";
 import useMateriales from "../../hooks/useMateriales";
 
@@ -13,6 +13,7 @@ const ServicioDelete = () => {
   const handleDelete = async (key) => {
     try {
       await firebase.db.collection("servicios").doc(key).delete();
+      message.success("¡Se eliminó correctamente!");
     } catch (error) {
       console.log(error);
     }

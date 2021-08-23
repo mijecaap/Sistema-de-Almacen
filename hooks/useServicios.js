@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { FirebaseContext } from "../firebase";
+import FirebaseContext from "../firebase/context";
 
 const useServicios = (orden) => {
   const [servicios, guardarServicios] = useState([]);

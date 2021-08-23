@@ -1,4 +1,5 @@
-import { Table, Tag } from "antd";
+import { Image, Table, Tag } from "antd";
+import Avatar from "antd/lib/avatar/avatar";
 import React from "react";
 import useMateriales from "../../hooks/useMateriales";
 import useServicios from "../../hooks/useServicios";
@@ -56,6 +57,16 @@ const ServicioRead = () => {
         });
       },
     },
+    {
+      title: "Imagen",
+      dataIndex: "imagen",
+      key: "imagen",
+      render: (_, record) => {
+        return(
+          <Avatar shape="square" size={64} src={<Image src={record.imagen}/>} />
+        );
+      }
+    }
   ];
   return (
     <>

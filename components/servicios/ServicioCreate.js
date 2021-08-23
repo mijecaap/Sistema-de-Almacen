@@ -9,7 +9,7 @@ import {
   Cascader,
   InputNumber,
 } from "antd";
-import { FirebaseContext } from "../../firebase";
+import FirebaseContext from "../../firebase/context";
 import { useRouter } from "next/router";
 import FileUploader from "react-firebase-file-uploader";
 import React, { useContext, useState, useEffect } from "react";
@@ -71,6 +71,8 @@ const ServicioCreate = () => {
     };
 
     firebase.db.collection("servicios").add(servicio);
+
+    message.success("¡Creación completada!");
 
     form.resetFields();
   }

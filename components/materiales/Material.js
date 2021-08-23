@@ -9,14 +9,14 @@ const Material = ({ menu }) => {
   return (
     <div>
       <Row align="middle" style={{ height: "100%" }}>
-        <Col span={4} />
-        <Col span={16}>
+        <Col span={1} />
+        <Col span={22}>
           {menu === "21" ? <MaterialRead /> : null}
           {menu === "22" ? <MaterialCreate /> : null}
           {menu === "23" ? <MaterialUpdate /> : null}
           {menu === "24" ? <MaterialDelete /> : null}
         </Col>
-        <Col span={4} />
+        <Col span={1} />
       </Row>
     </div>
   );

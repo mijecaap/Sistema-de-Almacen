@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import firebase from "../firebase";
+import firebase from "../firebase/firebase";
 
 function useAutenticacion() {
   const [usuarioAutenticado, guardarUsuarioAutenticado] = useState(null);
@@ -17,5 +17,4 @@ function useAutenticacion() {
 
   return usuarioAutenticado;
 }
-
 export default useAutenticacion;

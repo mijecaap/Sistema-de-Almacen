@@ -1,7 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Popconfirm, Table } from "antd";
 import React, { useContext } from "react";
-import { FirebaseContext } from "../../firebase";
+import FirebaseContext from "../../firebase/context";
 import usePersonal from "../../hooks/usePersonal";
 
 const PersonalDelete = () => {
@@ -12,6 +12,7 @@ const PersonalDelete = () => {
   const handleDelete = async (key) => {
     try {
       await firebase.db.collection("empleados").doc(key).delete();
+      message.success("¡Se eliminó correctamente!");
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +68,7 @@ const PersonalDelete = () => {
   ];
   return (
     <>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
     </>
   );
 };
