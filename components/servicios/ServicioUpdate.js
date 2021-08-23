@@ -1,4 +1,8 @@
-import { MinusCircleOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Popconfirm,
@@ -24,6 +28,11 @@ import useMateriales from "../../hooks/useMateriales";
 const ServicioUpdate = () => {
   const [current, setCurrent] = useState(0);
   const [id, setId] = useState("");
+
+  const [nombreimagen, guardarNombre] = useState("");
+  const [subiendo, guardarSubiendo] = useState(false);
+  const [progreso, guardarProgreso] = useState(0);
+  const [urlimagen, guardarUrlImagen] = useState("");
 
   const { servicios } = useServicios("nombre");
   const materialesload = useMateriales("nombre");

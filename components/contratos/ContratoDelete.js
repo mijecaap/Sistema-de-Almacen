@@ -1,5 +1,5 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Popconfirm, Table } from "antd";
+import { Popconfirm, Table, message } from "antd";
 import React, { useContext } from "react";
 import FirebaseContext from "../../firebase/context";
 import useContratos from "../../hooks/useContratos";
