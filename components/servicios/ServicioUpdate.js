@@ -32,7 +32,7 @@ const ServicioUpdate = () => {
   const [nombreimagen, guardarNombre] = useState("");
   const [subiendo, guardarSubiendo] = useState(false);
   const [progreso, guardarProgreso] = useState(0);
-  const [urlimagen, guardarUrlImagen] = useState("");
+  const [imagen, guardarUrlImagen] = useState("");
 
   const { servicios } = useServicios("nombre");
   const materialesload = useMateriales("nombre");
@@ -126,7 +126,10 @@ const ServicioUpdate = () => {
       nombre,
       descripcion,
       materiales,
+      imagen,
     };
+
+    console.log(servicio);
 
     firebase.db.collection("servicios").doc(id).update(servicio);
 

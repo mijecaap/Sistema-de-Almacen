@@ -164,7 +164,7 @@ const ContratoUpdate = () => {
         firebase.db.collection("materiales").doc(mtfind.id).update(mtupdate);
       });
 
-      firebase.db.collection("contratos").add(contrato);
+      firebase.db.collection("contratos").doc(id).update(contrato);
 
       message.success(
         "¡Contrato creado - Se descontó del stock de materiales!"
